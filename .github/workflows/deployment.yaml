@@ -56,7 +56,6 @@ jobs:
         run: |
           docker build --build-arg VITE_BACKEND_BASE_URL="http://${{ env.ALB_DNS }}" -t ${{ env.DOCKERHUB_USERNAME }}/mern-frontend:latest ./frontend
           docker push ${{ env.DOCKERHUB_USERNAME }}/mern-frontend:latest
-          
 
       - name: Get public IPs of EC2 instances
         id: fetch_ips
@@ -66,15 +65,21 @@ jobs:
             --query 'Reservations[*].Instances[*].PublicIpAddress' \
             --output text)
           ips=$(echo $ips | xargs)
-          
           echo "ips=$ips" >> "$GITHUB_OUTPUT"
-         
+          echo "$ips" > ec2_ips.txt
 
-      - name: Deploy MERN app on EC2 instances
+      - name: Deploy to EC2 instances
         run: |
-          for ip in ${{ steps.fetch_ips.outputs.ips }}
-          do
+          for ip in $(cat ec2_ips.txt); do
             echo "Deploying to $ip"
+
             scp -o StrictHostKeyChecking=no -i ec2_key.pem docker-compose.yml ubuntu@$ip:/home/ubuntu/docker-compose.yml
-            ssh -o StrictHostKeyChecking=no -i ec2_key.pem ubuntu@$ip "docker-compose -f /home/ubuntu/docker-compose.yml pull && docker-compose -f /home/ubuntu/docker-compose.yml up -d --force-recreate"
-          done
+
+            ssh -o StrictHostKeyChecking=no -i ec2_key.pem ubuntu@$ip <<EOF
+              docker-compose -f /home/ubuntu/docker-compose.yml down --remove-orphans
+              docker system prune -f
+              docker-compose -f /home/ubuntu/docker-compose.yml pull
+              docker-compose -f /home/ubuntu/docker-compose.yml up -d --force-recreate
+              EOF
+
+              done
