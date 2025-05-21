@@ -75,7 +75,7 @@ const Home = () => {
           <p className="text-lg text-gray-600 mt-2">
             Hello, {userInfo}!
             <br />
-            Welcome back, dear user!!
+            Welcome back, dear user!
           </p>
         </div>
 
