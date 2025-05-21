@@ -15,7 +15,7 @@ const PORT = process.env.PORT;
 app.use("/auth",AuthRoutes);
 app.use("/notes", NotesRoutes);
 app.get("/",(req,res)=>{
-    res.send("Welcome User...");
+    res.send("Hello from the server ...");
 });
 
 
