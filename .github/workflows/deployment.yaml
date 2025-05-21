@@ -6,7 +6,7 @@ on:
       - main
 
 env:
-  ALB_DNS: note-making-proj-alb-451924831.eu-north-1.elb.amazonaws.com
+  ALB_DNS: note-making-proj-alb-1900749472.eu-north-1.elb.amazonaws.com
   PROJECT_NAME: note-making-proj
   DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
   DOCKERHUB_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}
