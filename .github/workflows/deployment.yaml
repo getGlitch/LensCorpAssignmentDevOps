@@ -75,11 +75,11 @@ jobs:
 
             scp -o StrictHostKeyChecking=no -i ec2_key.pem docker-compose.yml ubuntu@$ip:/home/ubuntu/docker-compose.yml
 
-            ssh -o StrictHostKeyChecking=no -i ec2_key.pem ubuntu@$ip <<EOF
+            ssh -o StrictHostKeyChecking=no -i ec2_key.pem ubuntu@$ip <<'EOF'
               docker-compose -f /home/ubuntu/docker-compose.yml down --remove-orphans
               docker system prune -f
               docker-compose -f /home/ubuntu/docker-compose.yml pull
               docker-compose -f /home/ubuntu/docker-compose.yml up -d --force-recreate
-           EOF
+          EOF
 
-           done
+          done
