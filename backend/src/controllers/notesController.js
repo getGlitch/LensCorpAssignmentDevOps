@@ -23,7 +23,7 @@ const GetAllNotes = async(req, res)=>{
         if(!notes){
             return res.status(404).json({message:"Failed to fetch the notes", success:false})
         }
-        res.status(200).json({message:"All notes fetched successfully", notes:notes, success:true})
+        res.status(200).json({message:"All notes have been fetched successfully", notes:notes, success:true})
     } catch (error) {
         res.status(500).json({message:"Internal Server Error", error})
     }
