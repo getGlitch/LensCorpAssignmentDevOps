@@ -1,27 +1,34 @@
-version: '3.8'  # Docker Compose version
+version: '3.8'
 
 services:
-  backend:
-    build:
-      context: ./backend  # The directory where the backend's Dockerfile is located
+  mongo:
+    image: mongo:6.0
+    container_name: mongo
+    restart: unless-stopped
     ports:
-      - "5000:5000"  # Maps container port 5000 to host port 5000
-    env_file:
-      - ./backend/.env  # Loads environment variables from backend/.env file
+      - "27017:27017"
     volumes:
-      - ./backend:/app  # Mounts backend folder into the container for live updates
-      - /app/node_modules  # Prevents overwriting node_modules inside the container
-    restart: unless-stopped  # Ensures backend restarts if it crashes
+      - mongo-data:/data/db
+
+  backend:
+    image: kunaldevopsmastery/mern-backend:latest
+    ports:
+      - "5000:5000"
+    environment:
+      - MONGO_URL=mongodb://mongo:27017/loginDB
+    depends_on:
+      - mongo
+    restart: unless-stopped
 
   frontend:
-    build:
-      context: ./frontend  # The directory where the frontend's Dockerfile is located
-      args:
-        - VITE_BACKEND_BASE_URL= http://backend:5000  # Build-time variable (will be set from .env file)
+    image: kunaldevopsmastery/mern-frontend:latest
     ports:
-      - "3000:80"  # Maps frontend container port 80 (Nginx) to host port 3000
+      - "3000:80"
     depends_on:
-      - backend  # Ensures backend starts before frontend
-    restart: unless-stopped  # Ensures frontend restarts if it crashes
-    env_file:
-      - ./frontend/.env  # Loads environment variables from frontend/.env file
+      - backend
+    environment:
+      - VITE_BACKEND_BASE_URL=http://note-making-proj-alb-451924831.eu-north-1.elb.amazonaws.com:5000
+    restart: unless-stopped
+
+volumes:
+  mongo-data:
