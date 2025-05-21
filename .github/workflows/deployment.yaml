@@ -76,5 +76,5 @@ jobs:
           do
             echo "Deploying to $ip"
             scp -o StrictHostKeyChecking=no -i ec2_key.pem docker-compose.yml ubuntu@$ip:/home/ubuntu/docker-compose.yml
-            ssh -o StrictHostKeyChecking=no -i ec2_key.pem ubuntu@$ip "docker-compose -f /home/ubuntu/docker-compose.yml pull && docker-compose -f /home/ubuntu/docker-compose.yml up -d"
+            ssh -o StrictHostKeyChecking=no -i ec2_key.pem ubuntu@$ip "docker-compose -f /home/ubuntu/docker-compose.yml pull && docker-compose -f /home/ubuntu/docker-compose.yml up -d --force-recreate"
           done
