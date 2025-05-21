@@ -1,23 +1,13 @@
 version: '3.8'
 
 services:
-  mongo:
-    image: mongo:6.0
-    container_name: mongo
-    restart: unless-stopped
-    ports:
-      - "27017:27017"
-    volumes:
-      - mongo-data:/data/db
-
   backend:
     image: kunaldevopsmastery/mern-backend:latest
     ports:
       - "5000:5000"
     environment:
-      - MONGO_URL=mongodb://mongo:27017/loginDB
-    depends_on:
-      - mongo
+      - PORT=5000
+      - MONGO_CONNECT=mongodb+srv://Kunal:Kunal@cluster0.qunea.mongodb.net/Nodejs-Users-Notes?retryWrites=true&w=majority&appName=Cluster0
     restart: unless-stopped
 
   frontend:
@@ -27,7 +17,7 @@ services:
     depends_on:
       - backend
     environment:
-      - VITE_BACKEND_BASE_URL=http://note-making-proj-alb-451924831.eu-north-1.elb.amazonaws.com:5000
+      - VITE_BACKEND_BASE_URL=http://note-making-proj-alb-1900749472.eu-north-1.elb.amazonaws.com:5000
     restart: unless-stopped
 
 volumes:
