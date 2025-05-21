@@ -107,7 +107,7 @@ const handleChange=(e)=>{
         <div className="mt-4 text-center text-sm text-gray-600">
           Don&apos;t have an account?{" "}
           <Link to="/signup" className="text-blue-600 hover:text-blue-700 font-medium">
-            Sign Up
+            Sign Up Here
           </Link>
         </div>
       </div>
